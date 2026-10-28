@@ -1,106 +1,153 @@
-openapi: 3.0.2
-info:
-  title: games-api
-  version: 1.0.0
-  description: |
-    ### This is a Swagger UI for games-api
-paths:
-  /games:
-    get:
-      requestBody: {}
-      tags:
-        - games
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: string
-              examples:
-                List of games:
-                  value:
-                    - Witcher 3
-                    - Cyberpunk 2077
-          description: Returns a list of games
-      summary: 'Get a list of all games '
-      description: 'Returns a list of all games in API '
-    post:
-      requestBody:
-        description: 'A new game to be created '
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/error'
-        required: true
-      tags:
-        - new-game
-      responses:
-        '201':
+  openapi: 3.0.2
+  info:
+    title: games-api
+    version: 1.0.0
+    description: |
+      ### This is a Swagger UI for games-api
+  paths:
+    /games:
+      get:
+        requestBody: {}
+        tags:
+          - games
+        responses:
+          '200':
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: string
+                examples:
+                  List of games:
+                    value:
+                      - Witcher 3
+                      - Cyberpunk 2077
+            description: Returns a list of games
+        summary: 'Get a list of all games '
+        description: 'Returns a list of all games in API '
+      post:
+        requestBody:
+          description: 'A new game to be created '
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/new-game'
-          description: New game is created
-        '400':
-          description: 'One or all params are missing. '
-      summary: Creates a game
-      description: ' Creates a new game'
-  '/games/{id}':
-    get:
-      tags:
-        - details
-      responses:
-        '200':
+          required: true
+        tags:
+          - new-game
+        responses:
+          '201':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/new-game'
+            description: New game is created
+          '400':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/error'
+            description: 'One or all params are missing. '
+        summary: Creates a game
+        description: ' Creates a new game'
+    '/games/{id}':
+      get:
+        tags:
+          - details
+        responses:
+          '200':
+            content:
+              application/json:
+                schema:
+                  type: array
+                  items:
+                    type: string
+                examples:
+                  Full details of a given game:
+                    value:
+                      id: 1
+                      name: Witcher 3
+                      price: 29.99
+            description: Returns full details of a given id game
+          '404':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/error'
+                examples:
+                  Game /w+ was not found:
+                    value: Game \\w+ was not found in game array.
+            description: Game was not found in games array
+        summary: Get full details of a game
+        description: Returns full details of a given id game
+      delete:
+        parameters:
+          - name: id
+            in: path
+            required: true
+            schema:
+              type: integer
+            description: ID of the game to delete
+        requestBody:
+          description: Delete a game
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  type: string
-              examples:
-                Full details of a given game:
-                  value:
-                    id: 1
-                    name: Witcher 3
-                    price: 29.99
-          description: Returns full details of a given id game
-        '404':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/error'
-              examples:
-                Game /w+ was not found:
-                  value: Game \\w+ was not found in game array.
-          description: Game was not found in games array
-      summary: Get full details of a game
-      description: Returns full details of a given id game
-components:
-  schemas:
-    error:
-      title: Root Type for error
-      description: ''
-      type: object
-      properties:
-        error:
-          type: string
-      example:
-        error: Error message.
-    new-game:
-      title: Root Type for new-game
-      description: ''
-      required:
-        - name
-        - price
-      type: object
-      properties:
-        name:
-          type: string
-        price:
-          format: float
-          type: number
-      example:
-        name: Tetris
-        price: 0.99
+                $ref: '#/components/schemas/delete-game'
+          required: true
+        tags:
+          - delete-game
+        responses:
+          '204':
+            description: Game deleted successfully
+          '404':
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/error'
+                examples:
+                  Game not found:
+                    value:
+                      error: Game not found
+            description: Game not found
+        summary: Delete a game
+        description: Deletes a game by its ID
+  components:
+    schemas:
+      error:
+        title: Root Type for error
+        description: ''
+        type: object
+        properties:
+          error:
+            type: string
+        example:
+          error: Error message.
+      new-game:
+        title: Root Type for new-game
+        description: ''
+        required:
+          - name
+          - price
+        type: object
+        properties:
+          name:
+            type: string
+          price:
+            format: float
+            type: number
+        example:
+          name: Tetris
+          price: 0.99
+      delete-game:
+        description: ''
+        required:
+          - id
+        type: object
+        properties:
+          id:
+            description: ''
+            type: integer
+        example:
+          id: 1
