@@ -1,0 +1,69 @@
+openapi: 3.0.2
+info:
+  title: games-api
+  version: 1.0.0
+  description: |
+    ### This is a Swagger UI for games-api
+paths:
+  /games:
+    get:
+      requestBody: {}
+      tags:
+        - games
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                List of games:
+                  value:
+                    - Witcher 3
+                    - Cyberpunk 2077
+          description: Returns a list of games
+      summary: 'Get a list of all games '
+      description: 'Returns a list of all games in API '
+  '/games/{id}':
+    get:
+      tags:
+        - details
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+              examples:
+                Full details of a given game:
+                  value:
+                    id: 1
+                    name: Witcher 3
+                    price: 29.99
+          description: Returns full details of a given id game
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              examples:
+                Game /w+ was not found:
+                  value: Game \\w+ was not found in game array.
+          description: Game was not found in games array
+      summary: Get full details of a game
+      description: Returns full details of a given id game
+components:
+  schemas:
+    error:
+      title: Root Type for error
+      description: ''
+      type: object
+      properties:
+        error:
+          type: string
+      example:
+        error: Error message.

@@ -1,7 +1,9 @@
 const app = require('express')()
 const port = 8080
 const swaggerUi = require('swagger-ui-express')
-const swaggerDocument = require('./docs/swagger.json');
+const yamljs = require('yamljs')
+const swaggerDocument = yamljs.load('./docs/swagger.yaml');
+
 
 const games = [
     {id: 1, name: "Witcher 3", price: 29.99},
