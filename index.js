@@ -19,7 +19,12 @@ app.get('/games', (req, res) => {
 })
 
 app.get('/games/:id', (req, res) => {
-    res.send(games[req.params.id])
+
+    if (typeof games[req.params.id - 1] === 'undefined') {
+        return res.status(404).send({error: "Game not found"})
+    }
+
+    res.send(games[req.params.id - 1])
 })
 app.use ('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
