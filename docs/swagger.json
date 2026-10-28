@@ -36,7 +36,7 @@
           }
         },
         "summary": "Get a list of all games ",
-        "description": "Returns a list of all games in API"
+        "description": "Returns a list of all games in API "
       }
     }
   }
